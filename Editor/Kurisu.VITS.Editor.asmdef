@@ -1,0 +1,18 @@
+{
+    "name": "Kurisu.VirtualHuman.Editor",
+    "rootNamespace": "Kurisu.VirtualHuman.Editor",
+    "references": [
+        "GUID:3d9eef0e5e4ecf242806cf4586c95150"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
