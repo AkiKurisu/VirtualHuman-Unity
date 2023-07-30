@@ -16,7 +16,7 @@ Bilibili: https://www.bilibili.com/video/BV1fX4y1E7ra/
 
 ## Environment configuration (non-Unity)
 1. KoboldAI-KoboldCPP https://github.com/LostRuins/koboldcpp
-(If you don’t need to run the language model locally, you don’t need to use ChatGPT)
+(No need for this if you don't want to run the language model locally such as using ChatGPT or only using VITS)
 2. VITS Simple API https://github.com/Artrajz/vits-simple-api
 
 ## How to use
