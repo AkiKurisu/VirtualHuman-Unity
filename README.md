@@ -8,7 +8,13 @@ It is important to note that this plugin does not provide any models.
 
 Bilibili: https://www.bilibili.com/video/BV1fX4y1E7ra/
 
+Example using LLM&&VITS in Unity to create AI girlfriend.
+
 <img src="Image/Sample.png">
+
+Example of synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync).
+
+<img src="Image/Sample2.png">
 
 ## Dependency (Unity)
 1. TextMeshPro

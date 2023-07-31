@@ -8,7 +8,13 @@ VirtualHuman是一个快速在Unity引擎中使用您的大语言模型、语音
 
 哔哩哔哩: https://www.bilibili.com/video/BV1fX4y1E7ra/
 
+使用LLM&&VITS在Unity中制作AI女友的示例。
+
 <img src="Image/Sample.png">
+
+配合uLipSync同步唇形的示例 (https://github.com/hecomi/uLipSync) 。
+
+<img src="Image/Sample2.png">
 
 ## 环境配置（非Unity）
 1. KoboldAI-KoboldCPP https://github.com/LostRuins/koboldcpp
