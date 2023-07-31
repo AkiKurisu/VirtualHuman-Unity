@@ -1,12 +1,13 @@
 using UnityEngine;
 using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text;
 namespace Kurisu.VirtualHuman
 {
     [Serializable]
     public class KoboldCharaPreset
     {
+        public string user_Name = "You";
         public string char_name;
         [TextArea]
         public string char_persona;
@@ -38,21 +39,30 @@ namespace Kurisu.VirtualHuman
         public string Port { get => port; set => port = value; }
         [SerializeField]
         private KoboldCharaPreset charaPreset;
+        [SerializeField]
+        private bool generatedOnStart;
         [TextArea(5, 50)]
         public string generatedMemory;
         [SerializeField, TextArea(5, 50)]
         private string responseCache;
         private KoboldClient client;
-        [SerializeField]
+        [SerializeField, Tooltip("Replace words for received response and replacement will be cached for next send.")]
         private ReplaceWord[] alwaysReplaceWords;
-        [SerializeField]
+        [SerializeField, Tooltip("Replace words only for received response, used for User Interface.")]
         private ReplaceWord[] localReplaceWords;
+        private StringBuilder stringBuilder = new();
+        //There are some key words we should handle manually.
+        //For example, if meet "END_OF_DIALOGUE", we should cut the response and keep only the first half.
+        //However, during the test, we will see that word should only exists in KoboldAI "Novel" mode.
+        //SO currently, we don't handle it but skipp reading them instead which may be modified in future.
         private static string[] replaceKeyWords = new string[]
         {
             ":","{","}","<START>","\"","\\"," ","END_OF_DIALOGUE","END_OF_ACTIVE_ANSWER"
         };
         private void Start()
         {
+            if (generatedOnStart)
+                GenerateMemory();
             InitClient();
         }
         public void InitClient()
@@ -73,7 +83,8 @@ namespace Kurisu.VirtualHuman
                 succeed = true;
                 responseCache = FormatResponse(result.Results[0].Text);
                 client.AppendNewPrompt(responseCache);
-                response = responseCache.Replace($"{charaPreset.char_name}", string.Empty);
+                response = responseCache.Replace($"{charaPreset.char_name}", string.Empty)
+                                        .Replace($"{charaPreset.user_Name}", string.Empty);
                 foreach (var keyword in replaceKeyWords)
                 {
                     response = response.Replace(keyword, string.Empty);
@@ -95,13 +106,13 @@ namespace Kurisu.VirtualHuman
         }
         private string FormatResponse(string response)
         {
+            //"USER" and "BOT" are default name for user and ai character
             response = response.Replace("{{<BOT>}}", charaPreset.char_name)
                                 .Replace("{<BOT>}", charaPreset.char_name)
                                 .Replace("<BOT>", charaPreset.char_name);
-            response = response.Replace("{{<USER>}}", "darling")
-                                .Replace("{<USER>}", "darling")
-                                .Replace("<USER>", "darling");
-            response = response.Replace("You:", string.Empty);
+            response = response.Replace("{{<USER>}}", charaPreset.user_Name)
+                                .Replace("{<USER>}", charaPreset.user_Name)
+                                .Replace("<USER>", charaPreset.user_Name);
             for (int i = 0; i < alwaysReplaceWords.Length; i++)
             {
                 response = response.Replace(alwaysReplaceWords[i].original, alwaysReplaceWords[i].replace);
@@ -110,7 +121,20 @@ namespace Kurisu.VirtualHuman
         }
         public void GenerateMemory()
         {
-            generatedMemory = JsonConvert.SerializeObject(charaPreset);
+            //This Prompt is the same as KoboldAI generated
+            stringBuilder.Append($"[The following is an interesting chat message log between You and {charaPreset.char_name}.");
+            //This Prompt is added by me and may be modified in future, you can have a test and change it to your version.
+            //Note: 
+            //Those Prompts are designed to generate a chat text. 
+            //If you want other forms like story mode, prompt should be changed. 
+            if (!string.IsNullOrEmpty(charaPreset.char_persona))
+                stringBuilder.Append($"{charaPreset.char_name}'s personal is : {charaPreset.char_persona}.");
+            if (!string.IsNullOrEmpty(charaPreset.world_scenario))
+                stringBuilder.Append($"The scenario of the following chat is : {charaPreset.world_scenario}.");
+            if (!string.IsNullOrEmpty(charaPreset.example_dialogue))
+                stringBuilder.Append($"The example dialogue of the following chat can be :{charaPreset.example_dialogue}.");
+            stringBuilder.Append(']');
+            generatedMemory = stringBuilder.ToString();
         }
         public void InitMemory()
         {

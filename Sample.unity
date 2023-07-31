@@ -175,7 +175,8 @@ MonoBehaviour:
   address: 127.0.0.1
   port: 5001
   charaPreset:
-    char_name: 
+    user_Name: You
+    char_name: Alice
     char_persona: 
     world_scenario: 
     example_dialogue: 

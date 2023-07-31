@@ -24,7 +24,13 @@ namespace Kurisu.VirtualHuman
             _baseUri = baseUri;
             this.genParams = genParams;
             this.charaPreset = charaPreset;
-            promptAlwaysInclude = memory;
+            stringBuilder.Clear();
+            stringBuilder.Append(memory);
+            stringBuilder.Append('\n');
+            //User input first
+            stringBuilder.Append(charaPreset.user_Name);
+            stringBuilder.Append(':');
+            promptAlwaysInclude = stringBuilder.ToString();
         }
         public void AppendNewPrompt(string newPrompt)
         {
@@ -38,10 +44,10 @@ namespace Kurisu.VirtualHuman
         {
             stringBuilder.Clear();
             stringBuilder.Append(promptAlwaysInclude);
-            stringBuilder.Append('\n');
-            stringBuilder.Append("You: ");
             stringBuilder.Append(message);
+            //Should be add if no end symbol ('!','.','?') added.
             stringBuilder.Append('\n');
+            //In order to let AI know it should complete character's dialogue.
             stringBuilder.Append(charaPreset.char_name);
             stringBuilder.Append(": ");
             genParams.Prompt = stringBuilder.ToString();

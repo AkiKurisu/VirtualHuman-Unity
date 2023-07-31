@@ -32,6 +32,8 @@ namespace Kurisu.VirtualHuman
                     TranslateText = string.Empty
                 };
             }
+            //SimpleJSON can be removed since we can use Newtonsoft.Json instead. 
+            //But it's easier to use Parsing in SimpleJson.
             var parsedTexts = JSONNode.Parse(webRequest.downloadHandler.text);
             var translatedText = string.Empty;
             if (parsedTexts != null && parsedTexts[0] != null)
