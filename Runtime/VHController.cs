@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using UnityEngine;
 using System;
+using System.Threading.Tasks;
 namespace Kurisu.VirtualHuman
 {
     public enum LLMAgentType
@@ -25,22 +26,7 @@ namespace Kurisu.VirtualHuman
             {
                 if (llmAgentType == value) return;
                 llmAgentType = value;
-                if (llmAgentType == LLMAgentType.GPT)
-                {
-                    LLMDriver = GPT;
-                    if (LLMDriver == null)
-                    {
-                        Debug.LogError("GPT controller not found !");
-                    }
-                }
-                else if (llmAgentType == LLMAgentType.Kobold)
-                {
-                    LLMDriver = Kobold;
-                    if (LLMDriver == null)
-                    {
-                        Debug.LogError("GPKoboldT controller not found !");
-                    }
-                }
+                OnLLMChanged();
             }
         }
         [SerializeField]
@@ -59,7 +45,7 @@ namespace Kurisu.VirtualHuman
         private string vitsLanguage = "ja";
         [SerializeField]
         private string userLanguage = "zh";
-        [SerializeField, Tooltip("Used to skip speech motion detail, especially used for KoboldAI.")]
+        [SerializeField, Tooltip("Used to skip reading motion detail, especially used for KoboldAI.")]
         private bool smartReading;
         private const string Pattern = @"\*(.+)\*";
         public event Action<AudioClip, string> OnResponse;
@@ -76,6 +62,10 @@ namespace Kurisu.VirtualHuman
             VITS = GetComponentInChildren<VITSController>();
             GPT = GetComponentInChildren<GPTController>();
             Kobold = GetComponentInChildren<KoboldController>();
+            OnLLMChanged();
+        }
+        private void OnLLMChanged()
+        {
             if (llmAgentType == LLMAgentType.GPT)
             {
                 LLMDriver = GPT;
@@ -89,7 +79,7 @@ namespace Kurisu.VirtualHuman
                 LLMDriver = Kobold;
                 if (LLMDriver == null)
                 {
-                    Debug.LogError("GPKoboldT controller not found !");
+                    Debug.LogError("Kobold controller not found !");
                 }
             }
         }
@@ -111,15 +101,7 @@ namespace Kurisu.VirtualHuman
                 //Translation Process for UI-LLM
                 if (translateUI2LLM)
                 {
-                    var translateSendResponse = await GoogleTranslator.TranslateTextAsync(userLanguage, llmLanguage, sendToVITS);
-                    if (!translateSendResponse.Status)
-                    {
-                        Debug.LogWarning("Google translate request failed, translation is skipped !");
-                    }
-                    else
-                    {
-                        sendToVITS = translateSendResponse.TranslateText;
-                    }
+                    sendToVITS = await ProcessTranslation(userLanguage, llmLanguage, sendToVITS);
                 }
                 var llmResponse = await LLMDriver.ProcessLLM(sendToVITS);
                 if (!llmResponse.Status)
@@ -132,30 +114,14 @@ namespace Kurisu.VirtualHuman
                 sendToVITS = llmResponse.Response;
                 if (translateLLM2VITS)
                 {
-                    var translateSendResponse = await GoogleTranslator.TranslateTextAsync(llmLanguage, vitsLanguage, sendToVITS);
-                    if (!translateSendResponse.Status)
-                    {
-                        Debug.LogWarning("Google translate request failed, translation is skipped !");
-                    }
-                    else
-                    {
-                        sendToVITS = translateSendResponse.TranslateText;
-                    }
+                    sendToVITS = await ProcessTranslation(llmLanguage, vitsLanguage, sendToVITS);
                 }
 
                 //Translation Process for LLM-User Interface
                 responseCache = sendToVITS;
                 if (translateLLM2UI)
                 {
-                    var translateReceiveResponse = await GoogleTranslator.TranslateTextAsync(llmLanguage, userLanguage, llmResponse.Response);
-                    if (!translateReceiveResponse.Status)
-                    {
-                        Debug.LogWarning("Google translate request failed, translation is skipped !");
-                    }
-                    else
-                    {
-                        responseCache = translateReceiveResponse.TranslateText;
-                    }
+                    responseCache = await ProcessTranslation(llmLanguage, userLanguage, llmResponse.Response);
                 }
             }
             else
@@ -163,15 +129,7 @@ namespace Kurisu.VirtualHuman
                 //Translation Process for UI-VITS
                 if (translateUI2LLM && translateLLM2VITS)
                 {
-                    var translateSendResponse = await GoogleTranslator.TranslateTextAsync(userLanguage, vitsLanguage, sendToVITS);
-                    if (!translateSendResponse.Status)
-                    {
-                        Debug.LogWarning("Google translate request failed, translation is skipped !");
-                    }
-                    else
-                    {
-                        sendToVITS = translateSendResponse.TranslateText;
-                    }
+                    sendToVITS = await ProcessTranslation(userLanguage, vitsLanguage, sendToVITS);
                 }
                 responseCache = message;
             }
@@ -182,6 +140,19 @@ namespace Kurisu.VirtualHuman
             }
             //Since VITS run on local which is faster than LLM, process it at last
             SendVITSAsync(vitsReadMessage);
+        }
+        private static async Task<string> ProcessTranslation(string souceLanguage, string targetLanaguage, string sourceText)
+        {
+            var translateSendResponse = await GoogleTranslator.TranslateTextAsync(souceLanguage, targetLanaguage, sourceText);
+            if (!translateSendResponse.Status)
+            {
+                Debug.LogWarning("Google request failed, translation is skipped !");
+            }
+            else
+            {
+                sourceText = translateSendResponse.TranslateText;
+            }
+            return sourceText;
         }
         public async void SendVITSAsync(string message)
         {

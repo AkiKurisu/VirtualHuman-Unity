@@ -32,7 +32,8 @@ Bilibili: https://www.bilibili.com/video/BV1fX4y1E7ra/
 ### ChatGPT 3.5
 - Please ensure the corresponding network environment when using ChatGPT
 1. Fill in OpenAI's <b>APIKey</b> in GPTController
-2. Fill in ``alwaysInclude`` to always send content, such as character settings
+2. Fill in ``alwaysInclude`` with content that is always sent, such as "answer in Japanese"
+3. Fill in character settings, background settings, etc. in ``m_Prompt``
 
 ### KoboldAI-KoboldCPP
 - KoboldAI-KoboldCPP is not a model but a text generation software for loading models
@@ -42,7 +43,7 @@ Bilibili: https://www.bilibili.com/video/BV1fX4y1E7ra/
 3. Click ``Generate Memory`` to serialize the above settings to ``generatedMemory``
 4. ``Smart Reading`` makes VITS skip Kobold-generated action and character expression descriptions (usually start and end with ``*``)
 
-## other instructions
+## Other instructions
 
 ### Google Translation
 - Checking any translation options will use Google Translate, so please ensure the corresponding network environment

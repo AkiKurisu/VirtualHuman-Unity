@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 namespace Kurisu.VirtualHuman
 {
+    //Modify from https://github.com/pboardman/KoboldSharp
     public class ModelOutput
     {
         [JsonProperty("results")]

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 namespace Kurisu.VirtualHuman
 {
+    //Modify from https://github.com/pboardman/KoboldSharp
     public class KoboldClient
     {
         private readonly HttpClient _client;
