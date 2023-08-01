@@ -59,7 +59,7 @@ namespace Kurisu.VirtualHuman
             content = content.Trim();
             return JsonConvert.DeserializeObject<ModelOutput>(content);
         }
-        public void InitMemory(string memory)
+        public void SetMemory(string memory)
         {
             promptAlwaysInclude = memory;
         }

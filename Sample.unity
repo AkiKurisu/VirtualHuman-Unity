@@ -176,11 +176,17 @@ MonoBehaviour:
   port: 5001
   charaPreset:
     user_Name: You
-    char_name: Alice
-    char_persona: 
-    world_scenario: 
-    example_dialogue: 
-  generatedMemory: 
+    char_name: Unity Chan
+    char_persona: Unity Chan is the spokesperson and mascot of Unity company
+    world_scenario: Unity Chan want You to make a game using Unity
+    example_dialogue: "Unity Chan: \nHi, i'm Unity Chan !Do you want to learn Unity?\nYou:\nWhat
+      is Unity?"
+  generatedOnStart: 1
+  generatedMemory: "[The following is an interesting chat message log between You
+    and Unity Chan.\nUnity Chan's persona : Unity Chan is the spokesperson and mascot
+    of Unity company\nWorld's scenario : Unity Chan want You to make a game using
+    Unity]\n<START>\nUnity Chan: \nHi, i'm Unity Chan !Do you want to learn Unity?\nYou:\nWhat
+    is Unity?"
   responseCache: 
   alwaysReplaceWords: []
   localReplaceWords: []
@@ -233,8 +239,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905576d5c2644964eb7a698c300d10c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alwaysInclude: 
-  m_Prompt: 
+  alwaysInclude: Speek Japanese
+  m_Prompt: 'You are the spokesperson and mascot of Unity company : Unity Chan.
+
+    You
+    want me to make a game using Unity.'
   openAIKey: 
   responseCache: 
 --- !u!1 &427606468

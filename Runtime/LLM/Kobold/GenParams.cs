@@ -38,7 +38,7 @@ namespace Kurisu.VirtualHuman
         [JsonProperty("stop_sequence")]
         private List<string> stopSequence { get; set; }
 
-        public GenParams()
+        public GenParams(List<string> stopSequence = null)
         {
             //Preset
             const int n = 1;
@@ -69,7 +69,8 @@ namespace Kurisu.VirtualHuman
             RepPenSlope = repPenSlope;
             SamplerOrder = new List<int> { 6, 0, 1, 3, 4, 2, 5 };
             Quiet = quiet;
-            stopSequence = new List<string>() { "You:", "\nYou " };
+            if (stopSequence == null) this.stopSequence = new List<string>() { "You:", "\nYou " };
+            else this.stopSequence = new List<string>(stopSequence);
         }
 
         public string GetJson()

@@ -2,18 +2,19 @@ using UnityEngine;
 using System;
 using System.Threading.Tasks;
 using System.Text;
+using System.Collections.Generic;
 namespace Kurisu.VirtualHuman
 {
     [Serializable]
     public class KoboldCharaPreset
     {
         public string user_Name = "You";
-        public string char_name;
+        public string char_name = "Bot";
         [TextArea]
         public string char_persona;
         [TextArea]
         public string world_scenario;
-        [TextArea]
+        [TextArea(5, 10)]
         public string example_dialogue;
     }
     public struct KoboldResponse : ILLMData
@@ -40,7 +41,7 @@ namespace Kurisu.VirtualHuman
         [SerializeField]
         private KoboldCharaPreset charaPreset;
         [SerializeField]
-        private bool generatedOnStart;
+        private bool generatedOnStart = true;
         [TextArea(5, 50)]
         public string generatedMemory;
         [SerializeField, TextArea(5, 50)]
@@ -67,7 +68,11 @@ namespace Kurisu.VirtualHuman
         }
         public void InitClient()
         {
-            client = new KoboldClient($"http://{address}:{port}", generatedMemory, charaPreset, new GenParams());
+            client = new KoboldClient($"http://{address}:{port}",
+                        generatedMemory,
+                        charaPreset,
+                        new GenParams(new List<string>() { $"{charaPreset.user_Name}:", $"\n{charaPreset.user_Name} " })
+                    );
         }
         public async Task<ILLMData> ProcessLLM(string message)
         {
@@ -107,6 +112,7 @@ namespace Kurisu.VirtualHuman
         private string FormatResponse(string response)
         {
             //"USER" and "BOT" are default name for user and ai character
+            //If no user and ai name override,should skip them to avoid reading
             response = response.Replace("{{<BOT>}}", charaPreset.char_name)
                                 .Replace("{<BOT>}", charaPreset.char_name)
                                 .Replace("<BOT>", charaPreset.char_name);
@@ -121,27 +127,34 @@ namespace Kurisu.VirtualHuman
         }
         public void GenerateMemory()
         {
-            //This Prompt is the same as KoboldAI generated
-            stringBuilder.Append($"[The following is an interesting chat message log between You and {charaPreset.char_name}.");
+            stringBuilder.Clear();
+            //This Prompt is the same as KoboldAI generated, useful for generating chat text
+            stringBuilder.Append($"[The following is an interesting chat message log between {charaPreset.user_Name} and {charaPreset.char_name}.");
             //This Prompt is added by me and may be modified in future, you can have a test and change it to your version.
             //Note: 
             //Those Prompts are designed to generate a chat text. 
             //If you want other forms like story mode, prompt should be changed. 
             if (!string.IsNullOrEmpty(charaPreset.char_persona))
-                stringBuilder.Append($"{charaPreset.char_name}'s personal is : {charaPreset.char_persona}.");
+                stringBuilder.Append($"\n{charaPreset.char_name}'s persona : {charaPreset.char_persona}");
             if (!string.IsNullOrEmpty(charaPreset.world_scenario))
-                stringBuilder.Append($"The scenario of the following chat is : {charaPreset.world_scenario}.");
+                stringBuilder.Append($"\nWorld's scenario : {charaPreset.world_scenario}");
+            //<START> means chat begining
+            stringBuilder.Append("]\n<START>");
+            //Example dialogue used as first dialogue piece
             if (!string.IsNullOrEmpty(charaPreset.example_dialogue))
-                stringBuilder.Append($"The example dialogue of the following chat can be :{charaPreset.example_dialogue}.");
-            stringBuilder.Append(']');
+            {
+                stringBuilder.Append('\n');
+                stringBuilder.Append(charaPreset.example_dialogue);
+            }
             generatedMemory = stringBuilder.ToString();
         }
         public void InitMemory()
         {
-            client.InitMemory(generatedMemory);
+            client.SetMemory(generatedMemory);
         }
         public async void Check()
         {
+            //Get last response
             var result = await client.Check();
             Debug.Log(result.Results[0].Text);
         }
