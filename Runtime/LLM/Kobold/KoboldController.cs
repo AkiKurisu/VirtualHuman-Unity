@@ -58,7 +58,7 @@ namespace Kurisu.VirtualHuman
         //SO currently, we don't handle it but skipp reading them instead which may be modified in future.
         private static string[] replaceKeyWords = new string[]
         {
-            ":","{","}","<START>","\"","\\"," ","END_OF_DIALOGUE","END_OF_ACTIVE_ANSWER"
+            "<START>","END_OF_DIALOGUE","END_OF_ACTIVE_ANSWER"
         };
         private void Start()
         {
@@ -88,8 +88,17 @@ namespace Kurisu.VirtualHuman
                 succeed = true;
                 responseCache = FormatResponse(result.Results[0].Text);
                 client.AppendNewPrompt(responseCache);
-                response = responseCache.Replace($"{charaPreset.char_name}", string.Empty)
-                                        .Replace($"{charaPreset.user_Name}", string.Empty);
+                int index = -1;
+                for (int i = 0; i < response.Length; i++)
+                    if (response[i] != '\n')
+                        break;
+                    else
+                        index++;
+                if (index > -1)
+                    response = response.Remove(0, index + 1);
+                response = responseCache.Replace($"{charaPreset.char_name}:", string.Empty)
+                                        .Replace($"{charaPreset.user_Name}:", string.Empty)
+                                        .Replace("\n\n", "\n");
                 foreach (var keyword in replaceKeyWords)
                 {
                     response = response.Replace(keyword, string.Empty);

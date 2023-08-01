@@ -29,12 +29,6 @@ namespace Kurisu.VirtualHuman
                 OnLLMChanged();
             }
         }
-        [SerializeField]
-        private bool translateUI2LLM;
-        [SerializeField]
-        private bool translateLLM2VITS;
-        [SerializeField]
-        private bool translateLLM2UI;
         public GPTController GPT { get; private set; }
         public KoboldController Kobold { get; private set; }
         public ILLMDriver LLMDriver { get; private set; }
@@ -98,8 +92,10 @@ namespace Kurisu.VirtualHuman
             //Process LLM
             if (llmAgentType != LLMAgentType.None)
             {
+                string currentLanaguage = userLanguage;
+
                 //Translation Process for UI-LLM
-                if (translateUI2LLM)
+                if (currentLanaguage != llmLanguage)
                 {
                     sendToVITS = await ProcessTranslation(userLanguage, llmLanguage, sendToVITS);
                 }
@@ -109,17 +105,18 @@ namespace Kurisu.VirtualHuman
                     OnFail?.Invoke("LLM request failed !");
                     return;
                 }
+                currentLanaguage = llmLanguage;
 
                 //Translation Process for LLM-VITS
                 sendToVITS = llmResponse.Response;
-                if (translateLLM2VITS)
+                if (currentLanaguage != vitsLanguage)
                 {
                     sendToVITS = await ProcessTranslation(llmLanguage, vitsLanguage, sendToVITS);
                 }
 
                 //Translation Process for LLM-User Interface
-                responseCache = sendToVITS;
-                if (translateLLM2UI)
+                responseCache = llmResponse.Response;
+                if (currentLanaguage != userLanguage)
                 {
                     responseCache = await ProcessTranslation(llmLanguage, userLanguage, llmResponse.Response);
                 }
@@ -127,7 +124,7 @@ namespace Kurisu.VirtualHuman
             else
             {
                 //Translation Process for UI-VITS
-                if (translateUI2LLM && translateLLM2VITS)
+                if (userLanguage != vitsLanguage)
                 {
                     sendToVITS = await ProcessTranslation(userLanguage, vitsLanguage, sendToVITS);
                 }
