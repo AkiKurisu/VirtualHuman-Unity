@@ -44,7 +44,6 @@ namespace Kurisu.VirtualHuman
         private const string Pattern = @"\*(.+)\*";
         public event Action<AudioClip, string> OnResponse;
         public event Action<string> OnFail;
-        private VITSHandle handleCache;
         private void Awake()
         {
             if (instance != null && instance != this)
@@ -79,7 +78,6 @@ namespace Kurisu.VirtualHuman
         }
         private void OnDestroy()
         {
-            handleCache.Release();
             if (instance != null && instance == this) instance = null;
         }
         public void SendAsync()
@@ -154,9 +152,13 @@ namespace Kurisu.VirtualHuman
         public async void SendVITSAsync(string message)
         {
             string sendToVITS = message;
+            //If only contains motion detail, no need to use VITS
+            if (string.IsNullOrWhiteSpace(sendToVITS) || string.IsNullOrEmpty(sendToVITS))
+            {
+                OnResponse?.Invoke(null, responseCache);
+                return;
+            }
             var vitsResponse = await VITS.SendVITSRequestAsync(sendToVITS);
-            handleCache.Release();
-            handleCache = vitsResponse;
             if (!vitsResponse.Status)
             {
                 OnFail?.Invoke("VITS request failed !");

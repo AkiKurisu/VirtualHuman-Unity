@@ -94,6 +94,7 @@ namespace Kurisu.VirtualHuman
             inputField.interactable = true;
             sendButton.interactable = true;
             AddBubble(false, response);
+            if (clip == null) return;
             audioSource.clip = clip;
             audioSource.Play();
         }

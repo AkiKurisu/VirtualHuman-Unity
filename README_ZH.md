@@ -48,10 +48,8 @@ VirtualHuman是一个快速在Unity引擎中使用您的大语言模型、语音
 ## 其他说明
 
 ### Google Translation
-- 勾选任何翻译选项都将使用Google翻译，因此请确保相应的网络环境
-- ``Tranlsate UI2LLM``：对用户输入到LLM进行翻译，例如本地LLM建议翻译为英文后再传给LLM，ChatGPT无需此操作
-- ``Translate LLM2VITS``：对LLM输出到VITS语音合成进行翻译，例如本地LLM输出英文翻译为日文后再传给VITS
-- ``Translate LLM2UI``：对LLM输出到用户显示进行翻译，例如ChatGPT输出日文，翻译为中文后再显示在Unity的UI组件上
+- 对LLM、用户输入输出、VITS的语言类型进行分类
+- 如果判断当前语言不同于指定语言将使用Google翻译，因此请确保相应的网络环境
 
 ## 待添加整合功能
 - Text-Generation-WebUI

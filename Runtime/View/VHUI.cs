@@ -46,6 +46,7 @@ namespace Kurisu.VirtualHuman
             inputField.interactable = true;
             sendButton.interactable = true;
             outputText.text = response;
+            if (clip == null) return;
             audioSource.clip = clip;
             audioSource.Play();
         }

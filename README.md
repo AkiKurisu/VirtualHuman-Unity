@@ -52,10 +52,8 @@ Example of synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync)
 ## Other instructions
 
 ### Google Translation
-- Checking any translation options will use Google Translate, so please ensure the corresponding network environment
-- ``Tranlsate UI2LLM``: Translate user input to LLM. For example, local LLM recommends translating to English before sending it to LLM. ChatGPT does not need this operation
-- ``Translate LLM2VITS``: Translate LLM output to VITS speech synthesis, for example, local LLM output English translation into Japanese and then send it to VITS
-- ``Translate LLM2UI``: Translate the LLM output to the user display, for example, ChatGPT outputs Japanese, translates to Chinese and then displays it on the UI component of Unity
+- Classify the language types of LLM, user input and output, VITS
+- If it is judged that the current language is different from the specified language, Google Translate will be used, so please ensure the corresponding network environment
 
 ## Integration function to be added
 - Text-Generation-WebUI
