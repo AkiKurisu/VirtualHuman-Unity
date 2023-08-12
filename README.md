@@ -21,9 +21,14 @@ Example of synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync)
 2. Newtonsoft.Json
 
 ## Environment configuration (non-Unity)
+### Local LLM (not required if using ChatGPT):
+
 1. KoboldAI-KoboldCPP https://github.com/LostRuins/koboldcpp
-(No need for this if you don't want to run the language model locally such as using ChatGPT or only using VITS)
-2. VITS Simple API https://github.com/Artrajz/vits-simple-api
+
+2. Text-Generation-WebUI https://github.com/oobabooga/text-generation-webui
+
+### VITS:
+1. VITS Simple API https://github.com/Artrajz/vits-simple-api
 
 ## How to use
 1. Open the sample scene Sample.unity

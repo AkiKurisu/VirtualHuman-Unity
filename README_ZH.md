@@ -17,9 +17,15 @@ VirtualHuman是一个快速在Unity引擎中使用您的大语言模型、语音
 <img src="Image/Sample2.png">
 
 ## 环境配置（非Unity）
+### Local LLM (如使用ChatGPT可不需要)：
+
 1. KoboldAI-KoboldCPP https://github.com/LostRuins/koboldcpp
-（如不需要本地运行语言模型即使用ChatGPT可不需要）
-2. VITS Simple API https://github.com/Artrajz/vits-simple-api
+
+2. Text-Generation-WebUI https://github.com/oobabooga/text-generation-webui
+
+### VITS:
+1. VITS Simple API https://github.com/Artrajz/vits-simple-api
+
 
 ## 使用方式
 1. 打开示例场景Sample.unity
