@@ -6,7 +6,7 @@ namespace Kurisu.VirtualHuman
 {
     public enum LLMAgentType
     {
-        None, GPT, Kobold
+        None, GPT, Kobold, Oobabooga
     }
     public class VHController : MonoBehaviour
     {
@@ -31,6 +31,7 @@ namespace Kurisu.VirtualHuman
         }
         public GPTController GPT { get; private set; }
         public KoboldController Kobold { get; private set; }
+        public OobaboogaController Oobabooga { get; private set; }
         public ILLMDriver LLMDriver { get; private set; }
         public VITSController VITS { get; private set; }
         [SerializeField]
@@ -55,6 +56,7 @@ namespace Kurisu.VirtualHuman
             VITS = GetComponentInChildren<VITSController>();
             GPT = GetComponentInChildren<GPTController>();
             Kobold = GetComponentInChildren<KoboldController>();
+            Oobabooga = GetComponentInChildren<OobaboogaController>();
             OnLLMChanged();
         }
         private void OnLLMChanged()
@@ -73,6 +75,14 @@ namespace Kurisu.VirtualHuman
                 if (LLMDriver == null)
                 {
                     Debug.LogError("Kobold controller not found !");
+                }
+            }
+            else if (llmAgentType == LLMAgentType.Oobabooga)
+            {
+                LLMDriver = Oobabooga;
+                if (LLMDriver == null)
+                {
+                    Debug.LogError("Oobabooga controller not found !");
                 }
             }
         }

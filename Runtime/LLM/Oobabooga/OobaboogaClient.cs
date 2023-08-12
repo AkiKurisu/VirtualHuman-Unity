@@ -1,20 +1,19 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 namespace Kurisu.VirtualHuman
 {
-    //Modify from https://github.com/pboardman/KoboldSharp
-    public class KoboldClient
+    public class OobaboogaClient
     {
         private readonly HttpClient _client;
         private readonly string _baseUri;
         private string promptAlwaysInclude;
-        private readonly GenParams genParams;
+        private readonly OobaboogaParams genParams;
         private readonly StringBuilder stringBuilder;
         private readonly CharaPresetConfig charaPreset;
-        public KoboldClient(string baseUri, string memory, CharaPresetConfig charaPreset, GenParams genParams)
+        public OobaboogaClient(string baseUri, string memory, CharaPresetConfig charaPreset, OobaboogaParams genParams)
         {
             _client = new HttpClient()
             {
@@ -62,22 +61,6 @@ namespace Kurisu.VirtualHuman
         public void SetMemory(string memory)
         {
             promptAlwaysInclude = memory;
-        }
-
-        public async Task<ModelOutput> Check()
-        {
-            var payload = new StringContent(string.Empty);
-            var response = await _client.PostAsync($"{_baseUri}/api/extra/generate/check", payload);
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            content = content.Trim();
-            return JsonConvert.DeserializeObject<ModelOutput>(content);
-        }
-        public async void Abort()
-        {
-            var payload = new StringContent(string.Empty);
-            var response = await _client.PostAsync($"{_baseUri}/api/v1/abort", payload);
-            await response.Content.ReadAsStringAsync();
         }
     }
 }

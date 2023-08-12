@@ -47,14 +47,18 @@ Example of synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync)
 1. Fill in the address and port in KoboldController
 2. Fill in character settings in ``charaPreset``
 3. Click ``Generate Memory`` to serialize the above settings to ``generatedMemory``
-4. ``Smart Reading`` makes VITS skip Kobold-generated action and character expression descriptions (usually start and end with ``*``)
+
+### Oobabooga-Text-Generation-WebUI
+- The steps to configure Oobabooga-Text-Generation-WebUI are basically the same as KoboldCPP
 
 ## Other instructions
+
+### VITS
+1. ``Smart Reading`` makes VITS skip Kobold-generated action and character expression descriptions (usually start and end with ``*``)
 
 ### Google Translation
 - Classify the language types of LLM, user input and output, VITS
 - If it is judged that the current language is different from the specified language, Google Translate will be used, so please ensure the corresponding network environment
 
 ## Integration function to be added
-- Text-Generation-WebUI
 - ChatGPT 4.0

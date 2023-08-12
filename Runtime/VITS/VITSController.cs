@@ -30,45 +30,43 @@ namespace Kurisu.VirtualHuman
         private void CacheAudioClip(AudioClip audioClip)
         {
             audioClipCache = audioClip;
-            audioClipCache.name = $"VITS-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}.wav";
+            audioClipCache.name = $"VITS-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.wav";
         }
         public async Task<VITSResponse> SendVITSRequestAsync(string message)
         {
-            using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(GetURL(message), AudioType.WAV))
+            using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(GetURL(message), AudioType.WAV);
+            www.SendWebRequest();
+            while (!www.isDone)
             {
-                www.SendWebRequest();
-                while (!www.isDone)
+                await Task.Yield();
+            }
+            if (www.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log(www.error);
+                return new VITSResponse()
                 {
-                    await Task.Yield();
-                }
-                if (www.result == UnityWebRequest.Result.ConnectionError)
+                    Status = false
+                };
+            }
+            else
+            {
+                AudioClip audioClip = null;
+                bool validate;
+                try
                 {
-                    Debug.Log(www.error);
-                    return new VITSResponse()
-                    {
-                        Status = false
-                    };
+                    audioClip = DownloadHandlerAudioClip.GetContent(www);
+                    CacheAudioClip(audioClip);
+                    validate = true;
                 }
-                else
+                catch
                 {
-                    AudioClip audioClip = null;
-                    bool validate;
-                    try
-                    {
-                        audioClip = DownloadHandlerAudioClip.GetContent(www);
-                        CacheAudioClip(audioClip);
-                        validate = true;
-                    }
-                    catch
-                    {
-                        validate = false;
-                    }
-                    return new VITSResponse()
-                    {
-                        Result = audioClip,
-                        Status = validate
-                    };
+                    validate = false;
                 }
+                return new VITSResponse()
+                {
+                    Result = audioClip,
+                    Status = validate
+                };
             }
         }
     }

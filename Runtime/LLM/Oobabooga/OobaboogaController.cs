@@ -1,23 +1,15 @@
 using UnityEngine;
-using System;
 using System.Threading.Tasks;
 using System.Text;
 using System.Collections.Generic;
 namespace Kurisu.VirtualHuman
 {
-    public struct KoboldResponse : ILLMData
+    public struct OobaboogaResponse : ILLMData
     {
         public bool Status { get; internal set; }
-
         public string Response { get; internal set; }
     }
-    [Serializable]
-    public class ReplaceWord
-    {
-        public string original;
-        public string replace;
-    }
-    public class KoboldController : MonoBehaviour, ILLMDriver
+    public class OobaboogaController : MonoBehaviour, ILLMDriver
     {
 
         [SerializeField]
@@ -34,7 +26,7 @@ namespace Kurisu.VirtualHuman
         public string generatedMemory;
         [SerializeField, TextArea(5, 50)]
         private string responseCache;
-        private KoboldClient client;
+        private OobaboogaClient client;
         [SerializeField, Tooltip("Replace words for received response and replacement will be cached for next send.")]
         private ReplaceWord[] alwaysReplaceWords;
         [SerializeField, Tooltip("Replace words only for received response, used for User Interface.")]
@@ -56,17 +48,17 @@ namespace Kurisu.VirtualHuman
         }
         public void InitClient()
         {
-            client = new KoboldClient($"http://{address}:{port}",
+            client = new OobaboogaClient($"http://{address}:{port}",
                         generatedMemory,
                         charaPreset,
-                        new GenParams(new List<string>() { $"{charaPreset.user_Name}:", $"\n{charaPreset.user_Name} " })
+                        new OobaboogaParams(new List<string>() { $"{charaPreset.user_Name}:", $"\n{charaPreset.user_Name} " })
                     );
         }
         public async Task<ILLMData> ProcessLLM(string message)
         {
             return await SendMessageToKoboldAsync(message);
         }
-        public async Task<KoboldResponse> SendMessageToKoboldAsync(string message)
+        public async Task<OobaboogaResponse> SendMessageToKoboldAsync(string message)
         {
             string response = string.Empty;
             bool succeed;
@@ -100,7 +92,7 @@ namespace Kurisu.VirtualHuman
             {
                 succeed = false;
             }
-            return new KoboldResponse()
+            return new OobaboogaResponse()
             {
                 Status = succeed,
                 Response = response
@@ -108,14 +100,6 @@ namespace Kurisu.VirtualHuman
         }
         private string FormatResponse(string response)
         {
-            //"USER" and "BOT" are default name for user and ai character
-            //If no user and ai name override,should skip them to avoid reading
-            response = response.Replace("{{<BOT>}}", charaPreset.char_name)
-                                .Replace("{<BOT>}", charaPreset.char_name)
-                                .Replace("<BOT>", charaPreset.char_name);
-            response = response.Replace("{{<USER>}}", charaPreset.user_Name)
-                                .Replace("{<USER>}", charaPreset.user_Name)
-                                .Replace("<USER>", charaPreset.user_Name);
             for (int i = 0; i < alwaysReplaceWords.Length; i++)
             {
                 response = response.Replace(alwaysReplaceWords[i].original, alwaysReplaceWords[i].replace);
@@ -148,16 +132,6 @@ namespace Kurisu.VirtualHuman
         public void InitMemory()
         {
             client.SetMemory(generatedMemory);
-        }
-        public async void Check()
-        {
-            //Get last response
-            var result = await client.Check();
-            Debug.Log(result.Results[0].Text);
-        }
-        public void Abort()
-        {
-            client.Abort();
         }
     }
 }

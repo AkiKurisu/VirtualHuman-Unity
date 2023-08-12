@@ -50,10 +50,6 @@ namespace Kurisu.VirtualHuman.Editor
             GUI.enabled = true;
             GUILayout.EndHorizontal();
         }
-        public static void DrawBackgroundRect(Rect rect, Color bg, Color line)
-        {
-            Handles.DrawSolidRectangleWithOutline(rect, bg, line);
-        }
         private void Save(SerializedProperty audioClipProperty, AudioClip audioClip)
         {
             string path = EditorUtility.OpenFolderPanel("Select save path", Application.dataPath, "");

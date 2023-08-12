@@ -35,51 +35,49 @@ namespace Kurisu.VirtualHuman
         public async Task<GPTResponse> SendMessageToGPTAsync(string message)
         {
             m_DataList.Add(new SendData("user", message + $"[{alwaysInclude}]"));
-            using (UnityWebRequest request = new UnityWebRequest(chatAPI, "POST"))
+            using UnityWebRequest request = new(chatAPI, "POST");
+            PostData _postData = new()
             {
-                PostData _postData = new PostData
-                {
-                    model = m_gptModel,
-                    messages = m_DataList
-                };
+                model = m_gptModel,
+                messages = m_DataList
+            };
 
-                string _jsonText = JsonUtility.ToJson(_postData);
-                byte[] data = System.Text.Encoding.UTF8.GetBytes(_jsonText);
-                request.uploadHandler = (UploadHandler)new UploadHandlerRaw(data);
-                request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-                request.SetRequestHeader("Content-Type", "application/json");
-                request.SetRequestHeader("Authorization", string.Format("Bearer {0}", openAIKey));
-                request.SendWebRequest();
-                while (!request.isDone)
+            string _jsonText = JsonUtility.ToJson(_postData);
+            byte[] data = System.Text.Encoding.UTF8.GetBytes(_jsonText);
+            request.uploadHandler = new UploadHandlerRaw(data);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Authorization", string.Format("Bearer {0}", openAIKey));
+            request.SendWebRequest();
+            while (!request.isDone)
+            {
+                await Task.Yield();
+            }
+            if (request.responseCode == 200)
+            {
+                string _msg = request.downloadHandler.text;
+                MessageBack messageBack = JsonUtility.FromJson<MessageBack>(_msg);
+                string _backMsg = string.Empty;
+                if (messageBack != null && messageBack.choices.Count > 0)
                 {
-                    await Task.Yield();
-                }
-                if (request.responseCode == 200)
-                {
-                    string _msg = request.downloadHandler.text;
-                    MessageBack messageBack = JsonUtility.FromJson<MessageBack>(_msg);
-                    string _backMsg = string.Empty;
-                    if (messageBack != null && messageBack.choices.Count > 0)
-                    {
 
-                        _backMsg = messageBack.choices[0].message.content;
-                        //添加记录
-                        m_DataList.Add(new SendData("assistant", _backMsg));
-                    }
-                    responseCache = _backMsg;
-                    return new GPTResponse()
-                    {
-                        Response = _backMsg,
-                        Status = true
-                    };
+                    _backMsg = messageBack.choices[0].message.content;
+                    //添加记录
+                    m_DataList.Add(new SendData("assistant", _backMsg));
                 }
-                Debug.Log($"ChatGPT_responseCode : {request.responseCode}");
+                responseCache = _backMsg;
                 return new GPTResponse()
                 {
-                    Response = string.Empty,
-                    Status = false
+                    Response = _backMsg,
+                    Status = true
                 };
             }
+            Debug.Log($"ChatGPT_responseCode : {request.responseCode}");
+            return new GPTResponse()
+            {
+                Response = string.Empty,
+                Status = false
+            };
         }
 
         #region 数据包

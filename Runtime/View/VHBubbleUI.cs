@@ -8,7 +8,7 @@ namespace Kurisu.VirtualHuman
     {
         private readonly ChatBubble bubblePrefab;
         private readonly int maxCount;
-        private Queue<ChatBubble> bubbleQueue = new();
+        private readonly Queue<ChatBubble> bubbleQueue = new();
         public BubblePool(ChatBubble bubblePrefab, int maxCount)
         {
             this.bubblePrefab = bubblePrefab;
@@ -19,7 +19,7 @@ namespace Kurisu.VirtualHuman
             ChatBubble bubble;
             if (bubbleQueue.Count < maxCount)
             {
-                bubble = GameObject.Instantiate(bubblePrefab);
+                bubble = Object.Instantiate(bubblePrefab);
                 return bubble;
             }
             else
