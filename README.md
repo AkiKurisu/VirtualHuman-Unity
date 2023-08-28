@@ -27,6 +27,8 @@ Example of synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync)
 
 2. Text-Generation-WebUI https://github.com/oobabooga/text-generation-webui
 
+3. ChatGLM-6B https://github.com/THUDM/ChatGLM2-6B
+
 ### VITS:
 1. VITS Simple API https://github.com/Artrajz/vits-simple-api
 
@@ -43,8 +45,7 @@ Example of synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync)
 ### ChatGPT 3.5
 - Please ensure the corresponding network environment when using ChatGPT
 1. Fill in OpenAI's <b>APIKey</b> in GPTController
-2. Fill in ``alwaysInclude`` with content that is always sent, such as "answer in Japanese"
-3. Fill in character settings, background settings, etc. in ``m_Prompt``
+2. Fill in character settings, background settings, etc. in ``m_Prompt``
 
 ### KoboldAI-KoboldCPP
 - KoboldAI-KoboldCPP is not a model but a text generation software for loading models
@@ -56,7 +57,11 @@ Example of synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync)
 ### Oobabooga-Text-Generation-WebUI
 - The steps to configure Oobabooga-Text-Generation-WebUI are basically the same as KoboldCPP
 
-## Other instructions
+### ChatGLM-6B OpenAI-API
+1. Fill in the address and port in GLMController
+2. Fill in character settings, background settings, etc. in ``m_Prompt``
+
+## Other Instructions
 
 ### VITS
 1. ``Smart Reading`` makes VITS skip Kobold-generated action and character expression descriptions (usually start and end with ``*``)

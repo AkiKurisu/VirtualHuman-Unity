@@ -6,7 +6,7 @@ namespace Kurisu.VirtualHuman
 {
     public enum LLMAgentType
     {
-        None, GPT, Kobold, Oobabooga
+        None, GPT, Kobold, Oobabooga, GLM
     }
     public class VHController : MonoBehaviour
     {
@@ -32,14 +32,18 @@ namespace Kurisu.VirtualHuman
         public GPTController GPT { get; private set; }
         public KoboldController Kobold { get; private set; }
         public OobaboogaController Oobabooga { get; private set; }
+        public GLMController GLM { get; private set; }
         public ILLMDriver LLMDriver { get; private set; }
         public VITSController VITS { get; private set; }
         [SerializeField]
         private string llmLanguage = "en";
+        public string LLMLanguage { get => llmLanguage; set => llmLanguage = value; }
         [SerializeField]
         private string vitsLanguage = "ja";
+        public string VITSLanguage { get => vitsLanguage; set => vitsLanguage = value; }
         [SerializeField]
         private string userLanguage = "zh";
+        public string UserLanguage { get => userLanguage; set => userLanguage = value; }
         [SerializeField, Tooltip("Used to skip reading motion detail, especially used for KoboldAI.")]
         private bool smartReading;
         private const string Pattern = @"\*(.+)\*";
@@ -57,6 +61,7 @@ namespace Kurisu.VirtualHuman
             GPT = GetComponentInChildren<GPTController>();
             Kobold = GetComponentInChildren<KoboldController>();
             Oobabooga = GetComponentInChildren<OobaboogaController>();
+            GLM = GetComponentInChildren<GLMController>();
             OnLLMChanged();
         }
         private void OnLLMChanged()
@@ -83,6 +88,14 @@ namespace Kurisu.VirtualHuman
                 if (LLMDriver == null)
                 {
                     Debug.LogError("Oobabooga controller not found !");
+                }
+            }
+            else if (llmAgentType == LLMAgentType.GLM)
+            {
+                LLMDriver = GLM;
+                if (LLMDriver == null)
+                {
+                    Debug.LogError("GLM controller not found !");
                 }
             }
         }

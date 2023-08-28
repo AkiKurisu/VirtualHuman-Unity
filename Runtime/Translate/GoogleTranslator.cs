@@ -1,7 +1,8 @@
 using UnityEngine;
-using SimpleJSON;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Text;
 namespace Kurisu.VirtualHuman
 {
     public struct GoogleTranslateResponse
@@ -14,8 +15,8 @@ namespace Kurisu.VirtualHuman
     {
         public static async Task<GoogleTranslateResponse> TranslateTextAsync(string sourceLanguage, string targetLanguage, string sourceText)
         {
+            StringBuilder stringBuilder = new();
             var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={sourceLanguage}&tl={targetLanguage}&dt=t&q={UnityWebRequest.EscapeURL(sourceText)}";
-
             var webRequest = UnityWebRequest.Get(url);
             webRequest.SendWebRequest();
             while (!webRequest.isDone)
@@ -32,23 +33,21 @@ namespace Kurisu.VirtualHuman
                     TranslateText = string.Empty
                 };
             }
-            //SimpleJSON can be removed since we can use Newtonsoft.Json instead. 
-            //But it's easier to use Parsing in SimpleJson.
-            var parsedTexts = JSONNode.Parse(webRequest.downloadHandler.text);
-            var translatedText = string.Empty;
+            JToken parsedTexts = JToken.Parse(webRequest.downloadHandler.text);
             if (parsedTexts != null && parsedTexts[0] != null)
             {
-                var jsonArray = parsedTexts[0].AsArray;
+                var jsonArray = parsedTexts[0].AsJEnumerable();
 
                 if (jsonArray != null)
                 {
-                    foreach (JSONNode innerArray in jsonArray)
+                    foreach (JToken innerArray in jsonArray)
                     {
-                        string text = innerArray[0];
+                        JToken text = innerArray[0];
 
-                        if (!string.IsNullOrEmpty(text))
+                        if (text != null)
                         {
-                            translatedText += text + " ";
+                            stringBuilder.Append(text);
+                            stringBuilder.Append(' ');
                         }
                     }
                 }
@@ -57,7 +56,7 @@ namespace Kurisu.VirtualHuman
             {
                 Status = true,
                 SourceText = sourceText,
-                TranslateText = translatedText.Trim()
+                TranslateText = stringBuilder.ToString().Trim()
             };
         }
     }

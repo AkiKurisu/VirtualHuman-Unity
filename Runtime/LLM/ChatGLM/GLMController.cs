@@ -5,22 +5,27 @@ using UnityEngine;
 using UnityEngine.Networking;
 namespace Kurisu.VirtualHuman
 {
-    public struct GPTResponse : ILLMData
+    public struct GLMResponse : ILLMData
     {
         public bool Status { get; internal set; }
         public string Response { get; internal set; }
     }
-    //Modify from https://github.com/Navi-Studio/Virtual-Human-for-Chatting
-    public class GPTController : MonoBehaviour, ILLMDriver
+    /// <summary>
+    /// Use ChatGLM with OpenAI API format to generate chat text
+    /// See https://github.com/THUDM/ChatGLM2-6B/blob/main/openai_api.py
+    /// </summary>
+    public class GLMController : MonoBehaviour, ILLMDriver
     {
-        private const string chatAPI = "https://api.openai-proxy.com/v1/chat/completions";
+        [SerializeField]
+        private string address = "127.0.0.1";
+        public string Address { get => address; set => address = value; }
+        [SerializeField]
+        private string port = "5001";
+        public string Port { get => port; set => port = value; }
         private const string m_gptModel = "gpt-3.5-turbo";
         private readonly List<SendData> m_DataList = new();
         [SerializeField, TextArea(5, 20)]
         private string m_Prompt;
-        [SerializeField]
-        private string openAIKey;
-        public string OpenAIKey { get => openAIKey; set => openAIKey = value; }
         private SendData promptData;
         private void Awake()
         {
@@ -37,8 +42,9 @@ namespace Kurisu.VirtualHuman
         }
         public async Task<GPTResponse> SendMessageToGPTAsync(string message)
         {
+            string _baseUri = $"http://{address}:{port}/v1/chat/completions";
             m_DataList.Add(new SendData("user", message));
-            using UnityWebRequest request = new(chatAPI, "POST");
+            using UnityWebRequest request = new(_baseUri, "POST");
             PostData _postData = new()
             {
                 model = m_gptModel,
@@ -50,7 +56,6 @@ namespace Kurisu.VirtualHuman
             request.uploadHandler = new UploadHandlerRaw(data);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-            request.SetRequestHeader("Authorization", string.Format("Bearer {0}", openAIKey));
             request.SendWebRequest();
             while (!request.isDone)
             {
@@ -74,7 +79,7 @@ namespace Kurisu.VirtualHuman
                     Status = true
                 };
             }
-            Debug.Log($"ChatGPT_responseCode : {request.responseCode}");
+            Debug.Log($"ChatGLM_responseCode : {request.responseCode}");
             return new GPTResponse()
             {
                 Response = string.Empty,

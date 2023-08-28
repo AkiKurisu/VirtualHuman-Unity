@@ -23,6 +23,8 @@ VirtualHuman是一个快速在Unity引擎中使用您的大语言模型、语音
 
 2. Text-Generation-WebUI https://github.com/oobabooga/text-generation-webui
 
+3. ChatGLM-6B https://github.com/THUDM/ChatGLM2-6B
+
 ### VITS:
 1. VITS Simple API https://github.com/Artrajz/vits-simple-api
 
@@ -40,8 +42,7 @@ VirtualHuman是一个快速在Unity引擎中使用您的大语言模型、语音
 ### ChatGPT 3.5
 - 使用ChatGPT请确保相应的网络环境
 1. 在GPTController中填写OpenAI的<b>APIKey</b>
-2. 在``alwaysInclude``中填写始终发送的内容，例如“使用日语回答”
-3. 在``m_Prompt``中填写人物设定、背景设定等
+2. 在``m_Prompt``中填写人物设定、背景设定等
 
 ### KoboldAI-KoboldCPP
 - KoboldAI-KoboldCPP并非一个模型而是用于加载模型的文本生成软件
@@ -52,6 +53,10 @@ VirtualHuman是一个快速在Unity引擎中使用您的大语言模型、语音
 
 ### Oobabooga-Text-Generation-WebUI
 - 配置Oobabooga-Text-Generation-WebUI的步骤与KoboldCPP基本一致
+
+### ChatGLM-6B OpenAI-API
+1. 在GLMController中填写地址和端口
+2. 在``m_Prompt``中填写人物设定、背景设定等
 
 ## 其他说明
 
