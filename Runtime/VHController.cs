@@ -44,6 +44,9 @@ namespace Kurisu.VirtualHuman
         [SerializeField]
         private string userLanguage = "zh";
         public string UserLanguage { get => userLanguage; set => userLanguage = value; }
+        [SerializeField]
+        private bool useVITS = true;
+        public bool UseVITS { get => useVITS; set => useVITS = value; }
         [SerializeField, Tooltip("Used to skip reading motion detail, especially used for KoboldAI.")]
         private bool smartReading;
         private const string Pattern = @"\*(.+)\*";
@@ -150,6 +153,11 @@ namespace Kurisu.VirtualHuman
                     sendToVITS = await ProcessTranslation(userLanguage, vitsLanguage, sendToVITS);
                 }
                 responseCache = message;
+            }
+            if (!useVITS)
+            {
+                OnResponse?.Invoke(null, responseCache);
+                return;
             }
             string vitsReadMessage = sendToVITS;
             if (smartReading)
