@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEditor;
 namespace Kurisu.VirtualHuman.Editor
 {
-    [CustomEditor(typeof(OobaboogaController))]
-    public class OobaboogaControllerEditor : UnityEditor.Editor
+    [CustomEditor(typeof(OobaboogaTransport))]
+    public class OobaboogaTransportEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            var controller = target as OobaboogaController;
+            var controller = target as OobaboogaTransport;
             if (GUILayout.Button("Generate Memory"))
             {
                 controller.GenerateMemory();

@@ -9,7 +9,7 @@ namespace Kurisu.VirtualHuman
         public bool Status { get; internal set; }
         public string Response { get; internal set; }
     }
-    public class OobaboogaController : MonoBehaviour, ILLMDriver
+    public class OobaboogaTransport : MonoBehaviour, ILLMDriver
     {
 
         [SerializeField]

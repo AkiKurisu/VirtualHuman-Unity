@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEditor;
 namespace Kurisu.VirtualHuman.Editor
 {
-    [CustomEditor(typeof(KoboldController))]
-    public class KoboldControllerEditor : UnityEditor.Editor
+    [CustomEditor(typeof(KoboldCPPTransport))]
+    public class KoboldTransportEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            var controller = target as KoboldController;
+            var controller = target as KoboldCPPTransport;
             if (GUILayout.Button("Generate Memory"))
             {
                 controller.GenerateMemory();

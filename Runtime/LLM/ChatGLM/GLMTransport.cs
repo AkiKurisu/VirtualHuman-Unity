@@ -14,7 +14,7 @@ namespace Kurisu.VirtualHuman
     /// Use ChatGLM with OpenAI API format to generate chat text
     /// See https://github.com/THUDM/ChatGLM2-6B/blob/main/openai_api.py
     /// </summary>
-    public class GLMController : MonoBehaviour, ILLMDriver
+    public class GLMTransport : MonoBehaviour, ILLMDriver
     {
         [SerializeField]
         private string address = "127.0.0.1";

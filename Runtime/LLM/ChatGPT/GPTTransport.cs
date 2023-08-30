@@ -11,13 +11,17 @@ namespace Kurisu.VirtualHuman
         public string Response { get; internal set; }
     }
     //Modify from https://github.com/Navi-Studio/Virtual-Human-for-Chatting
-    public class GPTController : MonoBehaviour, ILLMDriver
+    public class GPTTransport : MonoBehaviour, ILLMDriver
     {
-        private const string chatAPI = "https://api.openai-proxy.com/v1/chat/completions";
+        //You can use other OpenAI standard api url like https://github.com/chatanywhere/GPT_API_free
+        internal const string OpenAI_API_URL = "https://api.openai-proxy.com/v1/chat/completions";
+        public string API_URL { get => apiURL; set => apiURL = value; }
         private const string m_gptModel = "gpt-3.5-turbo";
         private readonly List<SendData> m_DataList = new();
         [SerializeField, TextArea(5, 20)]
         private string m_Prompt;
+        [SerializeField, Multiline]
+        private string apiURL = OpenAI_API_URL;
         [SerializeField]
         private string openAIKey;
         public string OpenAIKey { get => openAIKey; set => openAIKey = value; }
@@ -38,7 +42,7 @@ namespace Kurisu.VirtualHuman
         public async Task<GPTResponse> SendMessageToGPTAsync(string message)
         {
             m_DataList.Add(new SendData("user", message));
-            using UnityWebRequest request = new(chatAPI, "POST");
+            using UnityWebRequest request = new(API_URL, "POST");
             PostData _postData = new()
             {
                 model = m_gptModel,

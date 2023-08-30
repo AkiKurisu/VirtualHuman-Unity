@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEditor;
 namespace Kurisu.VirtualHuman.Editor
 {
-    [CustomEditor(typeof(VITSController))]
-    public class VITSControllerEditor : UnityEditor.Editor
+    [CustomEditor(typeof(VITSTransport))]
+    public class VITSTransportEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            var controller = target as VITSController;
+            var controller = target as VITSTransport;
             var audioClipProperty = serializedObject.FindProperty("audioClipCache");
             var clip = audioClipProperty.objectReferenceValue as AudioClip;
             EditorGUILayout.BeginVertical();

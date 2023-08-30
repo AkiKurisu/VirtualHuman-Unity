@@ -6,7 +6,7 @@ namespace Kurisu.VirtualHuman
 {
     public enum LLMAgentType
     {
-        None, GPT, Kobold, Oobabooga, GLM
+        None, GPT, KoboldCPP, Oobabooga, GLM
     }
     public class VHController : MonoBehaviour
     {
@@ -29,12 +29,12 @@ namespace Kurisu.VirtualHuman
                 OnLLMChanged();
             }
         }
-        public GPTController GPT { get; private set; }
-        public KoboldController Kobold { get; private set; }
-        public OobaboogaController Oobabooga { get; private set; }
-        public GLMController GLM { get; private set; }
+        public GPTTransport GPT { get; private set; }
+        public KoboldCPPTransport Kobold { get; private set; }
+        public OobaboogaTransport Oobabooga { get; private set; }
+        public GLMTransport GLM { get; private set; }
         public ILLMDriver LLMDriver { get; private set; }
-        public VITSController VITS { get; private set; }
+        public VITSTransport VITS { get; private set; }
         [SerializeField]
         private string llmLanguage = "en";
         public string LLMLanguage { get => llmLanguage; set => llmLanguage = value; }
@@ -60,11 +60,11 @@ namespace Kurisu.VirtualHuman
                 return;
             }
             instance = this;
-            VITS = GetComponentInChildren<VITSController>();
-            GPT = GetComponentInChildren<GPTController>();
-            Kobold = GetComponentInChildren<KoboldController>();
-            Oobabooga = GetComponentInChildren<OobaboogaController>();
-            GLM = GetComponentInChildren<GLMController>();
+            VITS = GetComponentInChildren<VITSTransport>();
+            GPT = GetComponentInChildren<GPTTransport>();
+            Kobold = GetComponentInChildren<KoboldCPPTransport>();
+            Oobabooga = GetComponentInChildren<OobaboogaTransport>();
+            GLM = GetComponentInChildren<GLMTransport>();
             OnLLMChanged();
         }
         private void OnLLMChanged()
@@ -77,7 +77,7 @@ namespace Kurisu.VirtualHuman
                     Debug.LogError("GPT controller not found !");
                 }
             }
-            else if (llmAgentType == LLMAgentType.Kobold)
+            else if (llmAgentType == LLMAgentType.KoboldCPP)
             {
                 LLMDriver = Kobold;
                 if (LLMDriver == null)

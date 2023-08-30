@@ -16,8 +16,8 @@ namespace Kurisu.VirtualHuman
         }
         public void SetUp(string characterName, string text)
         {
-            this.character.text = characterName;
-            this.context.text = text;
+            character.text = characterName;
+            context.text = text;
             LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
         }
     }

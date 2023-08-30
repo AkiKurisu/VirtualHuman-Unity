@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &321464183
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 321464184}
+  - component: {fileID: 321464185}
+  m_Layer: 0
+  m_Name: GLM
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &321464184
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321464183}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4455121229246692107}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &321464185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321464183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a3d19fb9714df64ba4ce47211a081c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  address: 127.0.0.1
+  port: 5001
+  m_Prompt: 
 --- !u!1 &4455121227907466525
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,13 +151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905576d5c2644964eb7a698c300d10c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alwaysInclude: Speek Japanese
   m_Prompt: 'You are the spokesperson and mascot of Unity company : Unity Chan.
 
     You
     want me to make a game using Unity.'
   openAIKey: 
-  responseCache: 
 --- !u!1 &4455121228754740772
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +302,7 @@ Transform:
   - {fileID: 4455121228688478805}
   - {fileID: 4455121228754740773}
   - {fileID: 4455121227907466526}
+  - {fileID: 321464184}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -278,4 +324,5 @@ MonoBehaviour:
   llmLanguage: en
   vitsLanguage: ja
   userLanguage: en
+  useVITS: 1
   smartReading: 1

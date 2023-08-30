@@ -9,7 +9,7 @@ namespace Kurisu.VirtualHuman
         public AudioClip Result { get; internal set; }
         public bool Status { get; internal set; }
     }
-    public class VITSController : MonoBehaviour
+    public class VITSTransport : MonoBehaviour
     {
         private const string CallAPIBase = "http://{0}:{1}/voice/vits?text={2}&id={3}";
         [SerializeField]

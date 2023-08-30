@@ -17,7 +17,7 @@ namespace Kurisu.VirtualHuman
         public string original;
         public string replace;
     }
-    public class KoboldController : MonoBehaviour, ILLMDriver
+    public class KoboldCPPTransport : MonoBehaviour, ILLMDriver
     {
 
         [SerializeField]
