@@ -4,15 +4,20 @@ VirtualHuman是一个快速在Unity引擎中使用您的大语言模型、语音
 
 需要注意的是，此插件不提供任何模型。
 
+## 不需要实时对话？
+尝试一下在编辑器中使用AIGC生成对话内容和语音
+
+推荐项目:[Next Gen Dialogue](https://github.com/AkiKurisu/Next-Gen-Dialogue)
+
 ## 演示 
 
-哔哩哔哩: https://www.bilibili.com/video/BV1fX4y1E7ra/
+哔哩哔哩（已删）: https://www.bilibili.com/video/BV1fX4y1E7ra/
 
-使用LLM&&VITS在Unity中制作AI女友的示例。
+使用LLM&&VITS在Unity中制作AI女友的示例截图
 
 <img src="Image/Sample.png">
 
-配合uLipSync同步唇形的示例 (https://github.com/hecomi/uLipSync) 。
+配合uLipSync同步唇形的示例截图 (https://github.com/hecomi/uLipSync) 
 
 <img src="Image/Sample2.png">
 

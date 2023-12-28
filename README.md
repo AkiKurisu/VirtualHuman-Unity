@@ -4,15 +4,20 @@ VirtualHuman is a plugin that quickly uses your large language model and speech 
 
 It is important to note that this plugin does not provide any models.
 
+## Don’t need real-time conversation?
+Try using AIGC to generate dialogue content and speech in the editor
+
+Recommended project:[Next Gen Dialogue](https://github.com/AkiKurisu/Next-Gen-Dialogue)
+
 ## Demo
 
-Bilibili: https://www.bilibili.com/video/BV1fX4y1E7ra/
+Bilibili (Delated): https://www.bilibili.com/video/BV1fX4y1E7ra/
 
-Example using LLM&&VITS in Unity to create AI girlfriend.
+Snapshot of example using LLM&&VITS in Unity to create AI girlfriend.
 
 <img src="Image/Sample.png">
 
-Example of synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync).
+Snapshot of example synchronizing lips with uLipSync (https://github.com/hecomi/uLipSync).
 
 <img src="Image/Sample2.png">
 
